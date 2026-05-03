@@ -1,1096 +1,913 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="root">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PersonalBrain — Your Second Brain</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Screen Time App – AI. Mood. Focus. Balance.</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-:root{
-  --bg:#09090f;--bg2:#101018;--bg3:#17171f;--bg4:#1e1e28;--bg5:#252532;
-  --border:rgba(255,255,255,0.055);--border2:rgba(255,255,255,0.11);--border3:rgba(255,255,255,0.18);
-  --txt:#e6e6f0;--txt2:#8e8ea8;--txt3:#5a5a72;
-  --v:#7c6fff;--v2:#a78bfa;--v3:rgba(124,111,255,0.15);
-  --g:#34d399;--g2:rgba(52,211,153,0.15);
-  --a:#fbbf24;--a2:rgba(251,191,36,0.15);
-  --c:#22d3ee;--c2:rgba(34,211,238,0.15);
-  --r:#f87171;
-  --head:'Syne',sans-serif;
-  --body:'DM Sans',sans-serif;
-  --mono:'DM Mono',monospace;
+/* ══════════════════════════════════════
+   DARK THEME (default)
+══════════════════════════════════════ */
+:root {
+  --bg0:#0D0B1A; --bg1:#13102B; --bg2:#1A1635; --bg3:#221E40;
+  --p1:#7B5EE8;  --p2:#9B7BFF; --p3:#C3AEFF;
+  --t1:#00D4FF;  --t2:#00B8D4;
+  --green:#00E5AA; --pink:#FF6B9D; --amber:#FFB347;
+  --text:#FFFFFF;  --text2:#B8B0D8; --text3:#7B748A;
+  --card:#1E1A38;  --card2:#251F45;
+  --nav-bg:#13102Eee;
+  --today-gradient: linear-gradient(135deg,#1E1A38,#2A2050);
+  --today-border: rgba(123,94,232,0.35);
+  --usage-bg:#251F45;
+  --focus-bg:linear-gradient(160deg,#0D0B1A,#1E0A4E,#0D0B2A);
 }
 
-html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--body);overflow:hidden;-webkit-font-smoothing:antialiased}
-
-/* noise */
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9998;opacity:.35}
-
-/* glows */
-.glow{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
-.glow-a{width:500px;height:500px;background:rgba(124,111,255,.07);top:-150px;left:-150px}
-.glow-b{width:350px;height:350px;background:rgba(34,211,238,.04);bottom:0;right:100px}
-
-/* scrollbar */
-::-webkit-scrollbar{width:3px;height:3px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--bg5);border-radius:3px}
-::selection{background:rgba(124,111,255,.3)}
-
-/* ── TOPBAR ─────────────────────────────────────────────── */
-#topbar{
-  position:relative;z-index:100;display:flex;align-items:center;gap:12px;
-  height:52px;padding:0 18px;
-  border-bottom:1px solid var(--border);
-  background:rgba(9,9,15,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  flex-shrink:0;
-}
-.logo{display:flex;align-items:center;gap:9px;font-family:var(--head);font-size:16px;font-weight:700;letter-spacing:-.4px;color:var(--txt);flex-shrink:0}
-.logo-orb{width:29px;height:29px;border-radius:8px;background:linear-gradient(135deg,var(--v),var(--c));display:flex;align-items:center;justify-content:center;font-size:15px}
-
-.search-wrap{flex:1;display:flex;justify-content:center}
-.search-inner{position:relative;width:360px;max-width:100%}
-.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--txt3);pointer-events:none;font-size:14px;font-style:normal}
-.search-box{
-  width:100%;padding:7px 48px 7px 33px;
-  background:var(--bg3);border:1px solid var(--border);border-radius:9px;
-  color:var(--txt);font-family:var(--body);font-size:13px;outline:none;
-  transition:border-color .2s;
-}
-.search-box::placeholder{color:var(--txt3)}
-.search-box:focus{border-color:var(--v)}
-.search-kbd{
-  position:absolute;right:9px;top:50%;transform:translateY(-50%);
-  font-family:var(--mono);font-size:10px;color:var(--txt3);
-  background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:2px 5px;
-  pointer-events:none;display:flex;align-items:center;gap:2px;
+/* ══════════════════════════════════════
+   LIGHT THEME
+══════════════════════════════════════ */
+[data-theme="light"] {
+  --bg0:#F0F2FF; --bg1:#E4E8FF; --bg2:#D8DEFF; --bg3:#CDD4FF;
+  --p1:#6344D4;  --p2:#7B5EE8; --p3:#5535B8;
+  --t1:#0099CC;  --t2:#0088AA;
+  --green:#00A87A; --pink:#CC4466; --amber:#CC8800;
+  --text:#12104A;  --text2:#4A4880; --text3:#8884AA;
+  --card:#FFFFFF;  --card2:#EAE8FF;
+  --nav-bg:#FFFFFFee;
+  --today-gradient: linear-gradient(135deg,#7B5EE8,#5535B8);
+  --today-border: rgba(123,94,232,0.5);
+  --usage-bg:#EAE8FF;
+  --focus-bg:linear-gradient(160deg,#E4E8FF,#CDD4FF,#D8DEFF);
 }
 
-/* search results */
-#searchDrop{
-  display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;
-  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
-  z-index:300;box-shadow:0 24px 64px rgba(0,0,0,.6);overflow:hidden;
-}
-#searchDrop.open{display:block}
-.sdrop-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}
-.sdrop-item:last-child{border-bottom:none}
-.sdrop-item:hover{background:var(--bg3)}
-.sdrop-title{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:2px}
-.sdrop-preview{font-size:11.5px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sdrop-preview mark{background:transparent;color:var(--v2);font-weight:500}
-.sdrop-empty{padding:24px;text-align:center;color:var(--txt3);font-size:13px}
-.sdrop-footer{display:flex;gap:14px;padding:8px 14px;background:var(--bg3);border-top:1px solid var(--border)}
-.sdrop-hint{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--txt3)}
-.sdrop-hint kbd{background:var(--bg4);border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+/* ══════════════════════════════════════
+   BASE
+══════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg0);transition:background 0.3s;}
+body{font-family:'Poppins',sans-serif;color:var(--text);display:flex;justify-content:center;transition:color 0.3s;}
+.app{width:100%;max-width:420px;background:var(--bg0);min-height:100vh;position:relative;overflow-x:hidden;transition:background 0.3s;}
 
-.topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.ico-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--txt2);font-size:14px;transition:all .15s}
-.ico-btn:hover{background:var(--bg3);border-color:var(--border2);color:var(--txt)}
-.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--v),var(--c));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--head);cursor:pointer;letter-spacing:.5px}
+/* ══════════════════════════════════════
+   SCREENS
+══════════════════════════════════════ */
+.screen{display:none;flex-direction:column;min-height:100vh;padding-bottom:72px;animation:fadeIn 0.25s ease;}
+.screen.active{display:flex;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 
-/* ── MAIN LAYOUT ─────────────────────────────────────────── */
-#app{display:flex;flex:1;overflow:hidden;position:relative;z-index:1}
+/* ══════════════════════════════════════
+   BOTTOM NAV
+══════════════════════════════════════ */
+.bnav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:420px;
+  background:var(--nav-bg);
+  backdrop-filter:blur(12px);
+  border-top:1px solid rgba(123,94,232,0.2);
+  display:flex;z-index:100;padding:6px 0 12px;
+  transition:background 0.3s;
+}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;}
+.bn svg{width:20px;height:20px;stroke:var(--text3);transition:all 0.2s;}
+.bn span{font-size:9px;color:var(--text3);font-family:'Poppins',sans-serif;transition:color 0.2s;}
+.bn.active svg{stroke:var(--p2);filter:drop-shadow(0 0 6px var(--p2));}
+.bn.active span{color:var(--p2);}
 
-/* ── SIDEBAR ─────────────────────────────────────────────── */
-#sidebar{
-  width:215px;flex-shrink:0;display:flex;flex-direction:column;
-  border-right:1px solid var(--border);background:rgba(16,16,24,.6);
-  overflow:hidden;
+/* ══════════════════════════════════════
+   TOP BAR
+══════════════════════════════════════ */
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;padding:1.25rem 1rem 0.5rem;}
+.greeting{font-size:13px;color:var(--text2);}
+.username{font-size:20px;font-weight:600;color:var(--text);}
+.topbar-right{display:flex;gap:8px;align-items:center;}
+.icon-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--card);border:1px solid rgba(123,94,232,0.3);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;transition:all 0.2s;
 }
-.sb-section{padding:14px 11px 8px}
-.sb-label{font-family:var(--mono);font-size:10px;color:var(--txt3);letter-spacing:1.2px;text-transform:uppercase;padding:0 7px;margin-bottom:7px}
-.nav-btn{
-  display:flex;align-items:center;gap:9px;width:100%;padding:7px 9px;
-  border-radius:8px;border:1px solid transparent;cursor:pointer;
-  font-family:var(--body);font-size:13px;color:var(--txt2);background:transparent;
-  text-align:left;transition:all .15s;
-}
-.nav-btn:hover{background:var(--bg3);color:var(--txt)}
-.nav-btn.active{background:var(--v3);border-color:rgba(124,111,255,.22);color:var(--v2)}
-.nav-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
-.nb-badge{
-  margin-left:auto;font-family:var(--mono);font-size:10px;
-  background:var(--bg4);color:var(--txt3);padding:1px 7px;border-radius:20px;
-}
-.nb-live{background:var(--g2);color:var(--g)}
-.sb-divider{height:1px;background:var(--border);margin:6px 11px}
-.tag-nav{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--txt2);transition:all .15s}
-.tag-nav:hover{background:var(--bg3);color:var(--txt)}
-.tag-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.sb-footer{margin-top:auto;padding:12px 11px;border-top:1px solid var(--border)}
-.storage-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-.storage-label{font-family:var(--mono);font-size:10.5px;color:var(--txt3)}
-.storage-track{background:var(--bg4);height:3px;border-radius:3px;overflow:hidden}
-.storage-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--v),var(--c));transition:width .6s ease}
+.icon-btn:hover{background:var(--card2);transform:scale(1.05);}
 
-/* ── CONTENT ─────────────────────────────────────────────── */
-#content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+/* ══════════════════════════════════════
+   TODAY CARD
+══════════════════════════════════════ */
+.today-card{
+  margin:0 1rem 0.75rem;
+  background:var(--today-gradient);
+  border:1px solid var(--today-border);
+  border-radius:18px;padding:1.25rem;
+  position:relative;overflow:hidden;
+}
+.today-card::before{content:'';position:absolute;top:-30px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(123,94,232,0.25),transparent 70%);}
+.today-label{font-size:12px;color:var(--text3);margin-bottom:3px;}
+.today-time{font-size:36px;font-weight:700;color:#fff;letter-spacing:-1px;}
+.today-change{font-size:12px;color:var(--green);margin-top:3px;}
+.goal-section{display:flex;align-items:center;gap:1rem;margin-top:1rem;}
+.ring-wrap{position:relative;width:72px;height:72px;flex-shrink:0;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-pct{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:15px;font-weight:700;color:#fff;}
+.goal-info .goal-title{font-size:11px;color:rgba(255,255,255,0.6);}
+.goal-info .goal-val{font-size:15px;font-weight:600;color:rgba(255,255,255,0.9);}
+.goal-info .goal-sub{font-size:12px;color:rgba(255,255,255,0.65);}
 
-/* tabs */
-.tabs{display:flex;align-items:center;gap:2px;padding:10px 18px 0;border-bottom:1px solid var(--border);flex-shrink:0}
-.tab{
-  padding:7px 15px;font-size:13px;color:var(--txt3);cursor:pointer;
-  border-bottom:2px solid transparent;margin-bottom:-1px;border-radius:7px 7px 0 0;
-  transition:all .15s;font-family:var(--body);background:transparent;border-left:none;border-right:none;border-top:none;
-}
-.tab:hover{color:var(--txt2)}
-.tab.active{color:var(--v2);border-bottom-color:var(--v)}
-.tab-plus{margin-left:auto;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--txt3);cursor:pointer;border-radius:6px;transition:all .15s}
-.tab-plus:hover{background:var(--bg3);color:var(--txt)}
+/* ══════════════════════════════════════
+   MOOD CARD
+══════════════════════════════════════ */
+.mood-card{margin:0 1rem 0.75rem;background:var(--card);border:1px solid rgba(0,212,255,0.2);border-radius:14px;padding:1rem;display:flex;align-items:center;gap:12px;transition:background 0.3s;}
+.mood-icon{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--p1),var(--t1));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.mood-label{font-size:11px;color:var(--text3);}
+.mood-val{font-size:14px;font-weight:600;color:var(--text);}
+.mood-sub{font-size:11px;color:var(--text2);}
+.mood-wave{flex:1;height:32px;overflow:hidden;}
+.mood-wave svg{width:100%;height:32px;}
 
-/* views */
-.view{display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0}
-.view.active{display:flex}
+/* ══════════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════════ */
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 1rem 0.4rem;}
+.sec-title{font-size:13px;font-weight:600;color:var(--text);}
+.sec-link{font-size:11px;color:var(--p2);cursor:pointer;}
 
-/* ── NOTES VIEW ──────────────────────────────────────────── */
-.notes-toolbar{display:flex;align-items:center;gap:10px;padding:14px 18px;flex-shrink:0}
-.btn{
-  display:flex;align-items:center;gap:6px;padding:7px 14px;
-  border-radius:8px;font-size:13px;cursor:pointer;
-  border:1px solid var(--border);background:var(--bg3);color:var(--txt2);
-  font-family:var(--body);transition:all .15s;white-space:nowrap;
+/* ══════════════════════════════════════
+   APP ROW  — real brand icons + hours
+══════════════════════════════════════ */
+.app-rows{padding:0 1rem;display:flex;flex-direction:column;gap:8px;}
+.app-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;background:var(--card);
+  border-radius:14px;border:1px solid rgba(255,255,255,0.05);
+  cursor:pointer;transition:background 0.15s,transform 0.15s;
 }
-.btn:hover{border-color:var(--border2);color:var(--txt)}
-.btn.primary{background:var(--v);border-color:var(--v);color:#fff}
-.btn.primary:hover{background:#6b5fee}
-.sort-sel{
-  background:var(--bg3);border:1px solid var(--border);color:var(--txt2);
-  font-size:12px;font-family:var(--mono);border-radius:7px;padding:6px 10px;
-  cursor:pointer;outline:none;
+.app-row:hover{background:var(--card2);transform:translateX(3px);}
+/* Icon box: holds the SVG brand logo */
+.aicon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;overflow:hidden;
 }
-.toolbar-gap{flex:1}
-.view-toggle{display:flex;gap:4px}
-.vt-btn{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--txt3);transition:all .15s}
-.vt-btn.on{background:var(--bg3);border-color:var(--border2);color:var(--txt)}
+.aicon svg{width:28px;height:28px;}
+.aname{font-size:13px;font-weight:500;color:var(--text);flex:1;}
+.abar-wrap{height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;margin-top:5px;}
+.abar{height:100%;border-radius:2px;}
+/* Hours label — big and visible */
+.atime{font-size:14px;font-weight:700;color:var(--text);}
+.apct{font-size:10px;color:var(--text3);}
 
-.stats-row{display:flex;align-items:center;gap:16px;padding:0 18px 12px;flex-shrink:0}
-.stat{font-family:var(--mono);font-size:11px;color:var(--txt3);display:flex;align-items:center;gap:5px}
-.stat b{color:var(--txt2);font-weight:500}
-.stat-sep{width:3px;height:3px;border-radius:50%;background:var(--border2)}
-.sync-dot{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;color:var(--g)}
-.sync-dot::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--g);flex-shrink:0;animation:pulse-dot 2s infinite}
-@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+/* ══════════════════════════════════════
+   USAGE SCREEN
+══════════════════════════════════════ */
+.usage-header{padding:1rem 1rem 0.5rem;display:flex;align-items:center;}
+.usage-total{margin:0 1rem 0.75rem;background:var(--usage-bg);border-radius:16px;padding:1.25rem;border:1px solid rgba(123,94,232,0.25);transition:background 0.3s;}
+.ut-label{font-size:12px;color:var(--text3);}
+.ut-time{font-size:36px;font-weight:700;color:var(--text);letter-spacing:-1px;}
+.ut-change{font-size:12px;color:var(--green);margin-top:3px;}
 
-/* upload zone */
-.upload-zone{
-  margin:0 18px 14px;border-radius:12px;
-  border:1.5px dashed var(--border2);padding:20px;text-align:center;
-  cursor:pointer;transition:all .2s;flex-shrink:0;display:none;
-}
-.upload-zone.show{display:block}
-.upload-zone:hover,.upload-zone.drag{border-color:var(--v);background:rgba(124,111,255,.05)}
-.uz-icon{font-size:26px;margin-bottom:6px}
-.uz-text{font-size:13px;color:var(--txt2)}
-.uz-sub{font-size:11px;color:var(--txt3);font-family:var(--mono);margin-top:3px}
+/* HOURLY CHART */
+.hourly-wrap{margin:0 1rem 0.75rem;background:var(--card);border-radius:14px;padding:1rem;border:1px solid rgba(255,255,255,0.05);transition:background 0.3s;}
+.hourly-bars{display:flex;align-items:flex-end;gap:3px;height:80px;}
+.hb{flex:1;border-radius:2px 2px 0 0;min-height:2px;}
+.hourly-xlabels{display:flex;justify-content:space-between;margin-top:6px;}
+.hxl{font-size:9px;color:var(--text3);}
 
-/* notes grid */
-.notes-grid{flex:1;overflow-y:auto;padding:0 18px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;align-content:start}
-.notes-list-wrap{flex:1;overflow-y:auto;padding:0 18px 20px}
+/* MOST USED */
+.mut-card{margin:0 1rem 0.75rem;background:var(--card);border:1px solid rgba(0,212,255,0.15);border-radius:14px;padding:1rem;display:flex;align-items:center;gap:12px;transition:background 0.3s;}
+.mut-icon{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#2A0A5E,#5A2D8A);display:flex;align-items:center;justify-content:center;font-size:24px;}
+.mut-title{font-size:13px;font-weight:600;color:var(--text);}
+.mut-sub{font-size:11px;color:var(--text2);margin-top:2px;}
 
-/* note card */
-.note-card{
-  position:relative;border-radius:14px;cursor:pointer;overflow:hidden;
-  background:var(--bg2);border:1px solid var(--border);
-  transition:transform .2s,border-color .2s,box-shadow .2s;
-  animation:card-in .28s ease both;
+/* ══════════════════════════════════════
+   FOCUS SCREEN
+══════════════════════════════════════ */
+.focus-hero{
+  margin:0.5rem 1rem 0.75rem;
+  background:var(--focus-bg);
+  border:1px solid rgba(123,94,232,0.3);border-radius:20px;
+  padding:2rem 1rem 1.5rem;text-align:center;
+  position:relative;overflow:hidden;transition:background 0.3s;
 }
-@keyframes card-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.note-card:hover{transform:translateY(-2px);border-color:var(--border2);box-shadow:0 8px 28px rgba(0,0,0,.3)}
-.note-card-bar{position:absolute;top:0;left:0;right:0;height:2px;opacity:.75}
-.nc-body{padding:16px 14px 13px}
-.nc-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
-.nc-title{font-family:var(--head);font-size:14px;font-weight:600;color:var(--txt);line-height:1.3;flex:1;min-width:0}
-.nc-menu{opacity:0;flex-shrink:0;background:transparent;border:none;cursor:pointer;color:var(--txt3);font-size:17px;padding:0 2px;transition:opacity .15s;line-height:1}
-.note-card:hover .nc-menu{opacity:1}
-.nc-preview{font-size:12px;color:var(--txt2);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.nc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
-.nc-tag{font-family:var(--mono);font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid}
-.nc-date{font-family:var(--mono);font-size:10px;color:var(--txt3)}
+.focus-orb{width:110px;height:110px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#9B7BFF,#3B0EA6,#1A0756);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 0 50px rgba(123,94,232,0.45);}
+.focus-hero h2{font-size:22px;font-weight:700;color:var(--text);line-height:1.3;}
+.focus-hero p{font-size:13px;color:var(--text2);margin-top:8px;line-height:1.6;}
+.time-btns{display:flex;gap:8px;justify-content:center;margin-top:1.25rem;}
+.tbtn{padding:9px 20px;border-radius:22px;border:1px solid rgba(123,94,232,0.4);background:rgba(123,94,232,0.1);color:var(--text);font-size:13px;font-family:'Poppins',sans-serif;cursor:pointer;transition:all 0.2s;}
+.tbtn:hover,.tbtn.active{background:var(--p1);border-color:var(--p1);box-shadow:0 0 14px rgba(123,94,232,0.4);}
+.start-btn{display:block;width:calc(100% - 2rem);margin:0.75rem 1rem 0;padding:15px;background:linear-gradient(90deg,var(--p1),var(--t2));border:none;border-radius:14px;color:white;font-size:15px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;letter-spacing:0.4px;box-shadow:0 6px 24px rgba(123,94,232,0.4);transition:all 0.2s;}
+.start-btn:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(123,94,232,0.5);}
+.focus-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0.75rem 1rem;}
+.fstat{background:var(--card);border-radius:12px;padding:12px 8px;text-align:center;border:1px solid rgba(255,255,255,0.05);transition:background 0.3s;}
+.fstat .fv{font-size:17px;font-weight:700;color:var(--p2);}
+.fstat .fl{font-size:10px;color:var(--text3);margin-top:3px;}
 
-/* note list item */
-.note-list-item{
-  display:flex;align-items:center;gap:14px;padding:13px 14px;
-  border-radius:10px;cursor:pointer;border:1px solid transparent;
-  transition:all .15s;margin-bottom:6px;animation:card-in .2s ease both;
-}
-.note-list-item:hover{background:var(--bg2);border-color:var(--border)}
-.nli-bar{width:3px;border-radius:3px;height:36px;flex-shrink:0}
-.nli-body{flex:1;min-width:0}
-.nli-title{font-size:13.5px;font-weight:500;color:var(--txt);margin-bottom:3px;font-family:var(--head)}
-.nli-preview{font-size:12px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nli-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+/* ══════════════════════════════════════
+   INSIGHTS
+══════════════════════════════════════ */
+.mood-chart-card{margin:0 1rem 0.75rem;background:var(--card);border-radius:14px;padding:1rem;border:1px solid rgba(255,255,255,0.05);transition:background 0.3s;}
+.mood-chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;}
+.mood-chart-legend{display:flex;gap:12px;margin-bottom:10px;}
+.mcl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);}
+.mclc{width:14px;height:3px;border-radius:2px;}
+.mood-summary-card{margin:0 1rem 0.75rem;background:var(--card);border-radius:14px;padding:1rem;border:1px solid rgba(0,229,170,0.15);display:flex;gap:12px;align-items:center;transition:background 0.3s;}
+.ms-icon{width:48px;height:48px;border-radius:50%;background:rgba(0,229,170,0.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.ms-title{font-size:14px;font-weight:600;color:var(--text);}
+.ms-sub{font-size:12px;color:var(--text2);margin-top:3px;}
+.insight-tip{margin:0 1rem 0.75rem;background:var(--card2);border-radius:14px;padding:1rem;border-left:3px solid var(--amber);display:flex;gap:10px;transition:background 0.3s;}
+.it-icon{font-size:20px;flex-shrink:0;}
+.it-text{font-size:12px;color:var(--text2);line-height:1.65;}
+.it-text strong{color:var(--text);}
 
-/* context menu */
-.ctx-menu{
-  position:fixed;background:var(--bg3);border:1px solid var(--border2);
-  border-radius:10px;padding:5px;z-index:500;
-  box-shadow:0 12px 40px rgba(0,0,0,.5);min-width:140px;
-  animation:scale-in .15s ease;
-}
-@keyframes scale-in{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-.ctx-item{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--txt2);transition:background .1s}
-.ctx-item:hover{background:var(--bg4);color:var(--txt)}
-.ctx-item.danger{color:var(--r)}
-.ctx-item.danger:hover{background:rgba(248,113,113,.1)}
+/* ══════════════════════════════════════
+   PROFILE / SETTINGS
+══════════════════════════════════════ */
+.profile-header{padding:1.5rem 1rem 1rem;display:flex;align-items:center;gap:14px;}
+.profile-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--p1),var(--t1));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;flex-shrink:0;}
+.profile-name{font-size:18px;font-weight:600;color:var(--text);}
+.profile-email{font-size:12px;color:var(--text3);}
+.settings-section{padding:0 1rem 0.5rem;}
+.settings-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px;padding-left:2px;}
+.settings-group{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);transition:background 0.3s;}
+.setting-row{display:flex;align-items:center;padding:13px 14px;border-bottom:1px solid rgba(255,255,255,0.04);gap:12px;cursor:pointer;transition:background 0.15s;}
+.setting-row:last-child{border-bottom:none;}
+.setting-row:hover{background:var(--card2);}
+.sr-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.sr-name{flex:1;font-size:13px;color:var(--text);}
+.sr-val{font-size:12px;color:var(--text3);}
 
-/* empty state */
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;padding:40px;color:var(--txt3);gap:10px}
-.es-icon{font-size:48px;opacity:.4}
-.es-title{font-family:var(--head);font-size:18px;color:var(--txt2)}
-.es-sub{font-size:13px;line-height:1.6;max-width:260px}
+/* Toggle switch */
+.toggle2{width:46px;height:26px;border-radius:13px;position:relative;cursor:pointer;transition:background 0.25s;flex-shrink:0;}
+.toggle2.on{background:var(--p1);}
+.toggle2.off{background:rgba(255,255,255,0.18);}
+[data-theme="light"] .toggle2.off{background:rgba(0,0,0,0.18);}
+.toggle2::after{content:'';position:absolute;width:22px;height:22px;background:white;border-radius:50%;top:2px;transition:transform 0.25s;box-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.toggle2.on::after{transform:translateX(20px);}
+.toggle2.off::after{transform:translateX(2px);}
 
-/* ── EDITOR MODAL ────────────────────────────────────────── */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:400;display:none;align-items:center;justify-content:center;backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
-.overlay.open{display:flex}
-.modal{
-  background:var(--bg2);border:1px solid var(--border2);border-radius:20px;
-  width:700px;max-width:96vw;max-height:88vh;display:flex;flex-direction:column;
-  overflow:hidden;animation:modal-in .22s ease;
-}
-@keyframes modal-in{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.modal-head{display:flex;align-items:center;gap:10px;padding:18px 20px;border-bottom:1px solid var(--border)}
-.modal-title-inp{
-  flex:1;background:transparent;border:none;outline:none;
-  font-family:var(--head);font-size:18px;font-weight:700;color:var(--txt);
-}
-.modal-title-inp::placeholder{color:var(--txt3)}
-.modal-x{background:transparent;border:none;cursor:pointer;color:var(--txt3);font-size:20px;width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.modal-x:hover{background:var(--bg3);color:var(--txt)}
-.md-toolbar{display:flex;align-items:center;gap:3px;padding:8px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.md-btn{padding:4px 9px;border-radius:5px;border:none;background:transparent;cursor:pointer;color:var(--txt2);font-size:12px;font-family:var(--mono);font-weight:500;transition:all .12s}
-.md-btn:hover{background:var(--bg3);color:var(--txt)}
-.md-sep{width:1px;height:18px;background:var(--border);margin:0 3px}
-.modal-editor{flex:1;overflow:hidden;display:flex}
-.modal-textarea{
-  flex:1;background:transparent;border:none;outline:none;
-  color:var(--txt);font-family:var(--mono);font-size:13px;line-height:1.85;
-  padding:18px 20px;resize:none;min-height:280px;
-}
-.modal-textarea::placeholder{color:var(--txt3)}
-.modal-foot{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid var(--border)}
-.tag-row{display:flex;gap:6px}
-.tag-pill{
-  padding:4px 12px;border-radius:20px;border:1px solid var(--border);
-  font-size:11px;font-family:var(--mono);cursor:pointer;color:var(--txt2);
-  background:transparent;transition:all .15s;
-}
-.tag-pill.sel{border-color:var(--v);background:var(--v3);color:var(--v2)}
-.modal-actions{display:flex;gap:8px;align-items:center}
-.wc-label{font-family:var(--mono);font-size:11px;color:var(--txt3)}
+/* Stat boxes */
+.stats-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 1rem 0.75rem;}
+.stat-box{background:var(--card);border-radius:12px;padding:10px;border:1px solid rgba(255,255,255,0.05);text-align:center;transition:background 0.3s;}
+.stat-box .sv{font-size:16px;font-weight:600;color:var(--text);}
+.stat-box .sl{font-size:10px;color:var(--text3);margin-top:2px;}
 
-/* ── AI HUB VIEW ─────────────────────────────────────────── */
-.aihub-wrap{flex:1;overflow-y:auto;padding:20px 18px}
-.aihub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
-.ai-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:14px;
-  padding:20px 16px;cursor:pointer;text-align:center;transition:all .2s;
+/* Toast notification */
+.toast{
+  position:fixed;bottom:90px;left:50%;
+  transform:translateX(-50%) translateY(10px);
+  background:var(--card2);border:1px solid rgba(123,94,232,0.4);
+  color:var(--text);font-size:13px;font-weight:500;
+  padding:10px 20px;border-radius:22px;
+  white-space:nowrap;opacity:0;pointer-events:none;
+  transition:all 0.3s;z-index:999;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
 }
-.ai-card:hover{border-color:var(--border2);transform:translateY(-2px)}
-.ai-card.picked{border-color:var(--v);background:rgba(124,111,255,.07)}
-.ai-emoji{font-size:32px;margin-bottom:10px}
-.ai-name{font-family:var(--head);font-size:15px;font-weight:600;color:var(--txt);margin-bottom:5px}
-.ai-desc{font-size:11.5px;color:var(--txt2);line-height:1.55}
-.ai-badge{
-  display:inline-flex;align-items:center;gap:4px;margin-top:9px;
-  font-family:var(--mono);font-size:10px;color:var(--g);
-  background:var(--g2);padding:3px 9px;border-radius:20px;
-}
-.ai-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--g)}
-.aihub-panel{
-  background:var(--bg2);border:1px solid var(--border);border-radius:14px;
-  padding:40px 20px;text-align:center;min-height:220px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-}
-.aihub-panel-icon{font-size:40px;opacity:.6}
-.aihub-panel-title{font-family:var(--head);font-size:16px;color:var(--txt2)}
-.aihub-panel-sub{font-size:13px;color:var(--txt3);line-height:1.6;max-width:360px}
-.aihub-open-btn{
-  margin-top:10px;display:inline-flex;align-items:center;gap:7px;
-  padding:9px 20px;background:var(--v);color:#fff;border-radius:9px;
-  font-size:13.5px;cursor:pointer;border:none;font-family:var(--body);
-  transition:background .15s;
-}
-.aihub-open-btn:hover{background:#6b5fee}
-
-/* ── CHAT VIEW ───────────────────────────────────────────── */
-.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
-.ctx-pill{
-  display:flex;align-items:center;gap:7px;margin:12px 18px 0;
-  padding:7px 12px;border-radius:9px;font-family:var(--mono);font-size:11px;
-  color:var(--g);background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);
-  flex-shrink:0;
-}
-.ctx-dot{width:5px;height:5px;border-radius:50%;background:var(--g);animation:pulse-dot 2s infinite;flex-shrink:0}
-.chat-msgs{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:14px;min-height:0}
-.msg{display:flex;gap:10px;animation:card-in .3s ease}
-.msg.user{flex-direction:row-reverse}
-.msg-av{
-  width:30px;height:30px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;font-family:var(--head);
-}
-.msg-av.ai{background:linear-gradient(135deg,var(--v),var(--c))}
-.msg-av.user{background:var(--bg4);border:1px solid var(--border2);color:var(--txt2);font-size:12px}
-.msg-body{max-width:76%}
-.msg-bubble{
-  padding:11px 14px;border-radius:14px;font-size:13.5px;line-height:1.65;
-}
-.msg.ai  .msg-bubble{background:var(--bg3);border:1px solid var(--border);border-radius:4px 14px 14px 14px;color:var(--txt)}
-.msg.user .msg-bubble{background:var(--v);border-radius:14px 4px 14px 14px;color:#fff}
-.msg-meta{font-family:var(--mono);font-size:10px;color:var(--txt3);margin-top:5px}
-.msg.user .msg-meta{text-align:right}
-.source-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
-.src-chip{
-  font-family:var(--mono);font-size:10px;color:var(--v2);
-  background:var(--v3);border:1px solid rgba(124,111,255,.2);
-  padding:2px 9px;border-radius:20px;
-}
-/* typing */
-.typing-row{display:flex;gap:10px;animation:card-in .2s ease}
-.typing-bubble{display:flex;align-items:center;gap:5px;padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:4px 14px 14px 14px}
-.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--txt3);animation:bounce .9s infinite}
-.typing-dot:nth-child(2){animation-delay:.15s}
-.typing-dot:nth-child(3){animation-delay:.3s}
-@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
-
-.chat-input-area{padding:14px 18px;border-top:1px solid var(--border);flex-shrink:0}
-.chat-box{
-  display:flex;align-items:flex-end;gap:10px;
-  background:var(--bg3);border:1px solid var(--border);border-radius:14px;
-  padding:10px 13px;transition:border-color .2s;
-}
-.chat-box:focus-within{border-color:var(--v)}
-.chat-ta{
-  flex:1;background:transparent;border:none;outline:none;
-  color:var(--txt);font-family:var(--body);font-size:13.5px;
-  resize:none;min-height:22px;max-height:120px;line-height:1.55;
-}
-.chat-ta::placeholder{color:var(--txt3)}
-.send-btn{
-  width:32px;height:32px;border-radius:9px;background:var(--v);
-  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:16px;flex-shrink:0;transition:background .15s;
-}
-.send-btn:hover{background:#6b5fee}
-.chat-hint{font-family:var(--mono);font-size:11px;color:var(--txt3);text-align:center;margin-top:8px}
-
-/* ── TOAST ───────────────────────────────────────────────── */
-#toast{
-  position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);
-  background:var(--bg3);border:1px solid var(--border2);border-radius:11px;
-  padding:10px 18px;font-size:13px;color:var(--txt);z-index:600;
-  box-shadow:0 10px 36px rgba(0,0,0,.5);display:flex;align-items:center;gap:8px;
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;
-}
-#toast.show{transform:translateX(-50%) translateY(0)}
-#toast.err{border-color:rgba(248,113,113,.35)}
-
-/* ── RESPONSIVE ──────────────────────────────────────────── */
-@media(max-width:680px){
-  #sidebar{display:none}
-  .aihub-grid{grid-template-columns:1fr}
-  .notes-grid{grid-template-columns:1fr}
-  .search-inner{width:200px}
-}
-
-input[type=file]{display:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
+<div class="app" id="mainApp">
 
-<div class="glow glow-a"></div>
-<div class="glow glow-b"></div>
-
-<!-- TOPBAR -->
-<div id="topbar">
-  <div class="logo">
-    <div class="logo-orb">🧠</div>
-    PersonalBrain
-  </div>
-
-  <div class="search-wrap">
-    <div class="search-inner">
-      <i class="search-icon">⌕</i>
-      <input class="search-box" id="gSearch" type="text" placeholder="Search notes, ideas, tasks…" autocomplete="off">
-      <span class="search-kbd">⌘K</span>
-      <div id="searchDrop"></div>
+<!-- ════════════ HOME ════════════ -->
+<div id="s-home" class="screen active">
+  <div class="topbar">
+    <div>
+      <div class="greeting" id="greeting-text">Good Evening 👋</div>
+      <div class="username">Hello, Chandan</div>
+    </div>
+    <div class="topbar-right">
+      <!-- 🌙/☀️ DARK MODE BUTTON — fully working -->
+      <div class="icon-btn" id="theme-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">
+        <span id="theme-icon">🌙</span>
+      </div>
+      <div class="icon-btn" onclick="showToast('No new notifications 🔔')">🔔</div>
     </div>
   </div>
 
-  <div class="topbar-right">
-    <button class="ico-btn" title="Upload" onclick="triggerUpload()">⬆</button>
-    <button class="ico-btn" title="Notifications" onclick="toast('🔔','No new notifications')">🔔</button>
-    <button class="ico-btn" title="Settings" onclick="toast('⚙️','Settings panel coming soon')">⚙</button>
-    <div class="avatar">YU</div>
+  <div class="today-card">
+    <div class="today-label">Today's Screen Time</div>
+    <div class="today-time">5h 20m</div>
+    <div class="today-change">↑ +12% from yesterday</div>
+    <div class="goal-section">
+      <div class="ring-wrap">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="5"/>
+          <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="5"
+            stroke-dasharray="175.9" stroke-dashoffset="22" stroke-linecap="round"/>
+        </svg>
+        <div class="ring-pct">87%</div>
+      </div>
+      <div class="goal-info">
+        <div class="goal-title">Goal: 6h 00m</div>
+        <div class="goal-val">87% of your goal</div>
+        <div class="goal-sub">38 min remaining</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mood-card">
+    <div class="mood-icon">🤖</div>
+    <div>
+      <div class="mood-label">AI Mood Now</div>
+      <div class="mood-val">😊 Calm</div>
+      <div class="mood-sub">You're in a good state!</div>
+    </div>
+    <div class="mood-wave">
+      <svg viewBox="0 0 100 32" preserveAspectRatio="none">
+        <polyline points="0,22 10,14 20,20 30,9 40,17 50,11 60,18 70,7 80,15 90,10 100,16"
+          fill="none" stroke="#00E5AA" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="sec-hdr">
+    <span class="sec-title">Top Apps</span>
+    <span class="sec-link" onclick="switchNav('usage')">See All</span>
+  </div>
+  <div class="app-rows" id="home-apps"></div>
+</div>
+
+<!-- ════════════ USAGE ════════════ -->
+<div id="s-usage" class="screen">
+  <div class="usage-header">
+    <div style="flex:1;font-size:19px;font-weight:600;color:var(--text);">App Usage</div>
+    <div style="font-size:12px;color:var(--p2);background:rgba(123,94,232,0.12);padding:5px 14px;border-radius:20px;border:1px solid rgba(123,94,232,0.3);cursor:pointer;" onclick="showToast('Filter: Today 📅')">Today ▾</div>
+  </div>
+
+  <div class="usage-total">
+    <div class="ut-label">Total Screen Time</div>
+    <div class="ut-time">5h 20m</div>
+    <div class="ut-change">↑ +12% from yesterday</div>
+  </div>
+
+  <div class="hourly-wrap">
+    <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">Hourly usage</div>
+    <div class="hourly-bars" id="hourly-bars"></div>
+    <div class="hourly-xlabels">
+      <span class="hxl">12 AM</span><span class="hxl">6 AM</span>
+      <span class="hxl">12 PM</span><span class="hxl">6 PM</span><span class="hxl">12 AM</span>
+    </div>
+  </div>
+
+  <div class="sec-hdr"><span class="sec-title">All Apps</span></div>
+  <div class="app-rows" id="usage-apps"></div>
+
+  <div class="mut-card">
+    <div class="mut-icon">🌙</div>
+    <div>
+      <div class="mut-title">Most Used Time</div>
+      <div style="font-size:14px;font-weight:600;color:var(--p2);">Evening</div>
+      <div class="mut-sub">You are most active between 7PM – 11PM</div>
+    </div>
   </div>
 </div>
 
-<!-- MAIN -->
-<div id="app">
+<!-- ════════════ FOCUS ════════════ -->
+<div id="s-focus" class="screen">
+  <div style="padding:1.25rem 1rem 0.5rem;font-size:19px;font-weight:600;color:var(--text);">Focus Mode</div>
 
-  <!-- SIDEBAR -->
-  <div id="sidebar">
-    <div class="sb-section">
-      <div class="sb-label">Workspace</div>
-      <button class="nav-btn active" onclick="switchTab('notes',this)" id="nav-notes">
-        <span class="nav-icon">📝</span>Notes
-        <span class="nb-badge" id="notesBadge">0</span>
-      </button>
-      <button class="nav-btn" onclick="switchTab('chat',this)" id="nav-chat">
-        <span class="nav-icon">💬</span>AI Chat
-        <span class="nb-badge nb-live">Live</span>
-      </button>
-      <button class="nav-btn" onclick="switchTab('aihub',this)" id="nav-aihub">
-        <span class="nav-icon">🤖</span>AI Hub
-      </button>
+  <div class="focus-hero">
+    <div class="focus-orb">🌿</div>
+    <h2>Stay Focused,<br>Achieve More!</h2>
+    <p>Block distractions and<br>improve your productivity.</p>
+    <div class="time-btns">
+      <button class="tbtn active" onclick="setFocus(this,25)">25 min</button>
+      <button class="tbtn" onclick="setFocus(this,50)">50 min</button>
+      <button class="tbtn" onclick="setFocus(this,0)">Custom</button>
     </div>
-    <div class="sb-divider"></div>
-    <div class="sb-section">
-      <div class="sb-label">Filter by Tag</div>
-      <div class="tag-nav" onclick="filterTag(null)">
-        <div class="tag-dot" style="background:var(--txt3)"></div>All Notes
-        <span class="nb-badge" style="margin-left:auto" id="allBadge">0</span>
-      </div>
-      <div class="tag-nav" onclick="filterTag('Research')">
-        <div class="tag-dot" style="background:var(--v)"></div>Research
-        <span class="nb-badge" style="margin-left:auto" id="b-Research">0</span>
-      </div>
-      <div class="tag-nav" onclick="filterTag('Ideas')">
-        <div class="tag-dot" style="background:var(--g)"></div>Ideas
-        <span class="nb-badge" style="margin-left:auto" id="b-Ideas">0</span>
-      </div>
-      <div class="tag-nav" onclick="filterTag('Tasks')">
-        <div class="tag-dot" style="background:var(--a)"></div>Tasks
-        <span class="nb-badge" style="margin-left:auto" id="b-Tasks">0</span>
-      </div>
-      <div class="tag-nav" onclick="filterTag('Misc')">
-        <div class="tag-dot" style="background:var(--c)"></div>Misc
-        <span class="nb-badge" style="margin-left:auto" id="b-Misc">0</span>
-      </div>
+  </div>
+  <button class="start-btn" id="start-btn" onclick="startFocus()">▶ Start Focus Session</button>
+
+  <div class="sec-hdr" style="margin-top:0.5rem;"><span class="sec-title">Today's Focus Stats</span></div>
+  <div class="focus-stats">
+    <div class="fstat"><div class="fv" id="fs-count">2</div><div class="fl">Sessions</div></div>
+    <div class="fstat"><div class="fv" id="fs-time">1h 20m</div><div class="fl">Focus Time</div></div>
+    <div class="fstat"><div class="fv">85%</div><div class="fl">Focus Score</div></div>
+  </div>
+
+  <div class="sec-hdr"><span class="sec-title">Focus History</span></div>
+  <div style="padding:0 1rem 1rem;" id="focus-history"></div>
+</div>
+
+<!-- ════════════ INSIGHTS ════════════ -->
+<div id="s-insights" class="screen">
+  <div style="padding:1.25rem 1rem 0.25rem;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:19px;font-weight:600;color:var(--text);">Insights</div>
+    <div style="font-size:12px;color:var(--p2);background:rgba(123,94,232,0.12);padding:5px 14px;border-radius:20px;border:1px solid rgba(123,94,232,0.3);cursor:pointer;" onclick="showToast('Viewing: This Week 📊')">This Week ▾</div>
+  </div>
+
+  <div class="mood-chart-card">
+    <div class="mood-chart-title">Mood vs Screen Time</div>
+    <div class="mood-chart-legend">
+      <div class="mcl"><div class="mclc" style="background:var(--p2)"></div>Screen Time (h)</div>
+      <div class="mcl"><div class="mclc" style="background:var(--green)"></div>Mood Score</div>
     </div>
-    <div class="sb-divider"></div>
-    <div class="sb-section">
-      <div class="sb-label">Recent</div>
-      <div id="recentList"></div>
-    </div>
-    <div class="sb-footer">
-      <div class="storage-row">
-        <span class="storage-label">Storage used</span>
-        <span class="storage-label" id="storagePct">0%</span>
-      </div>
-      <div class="storage-track"><div class="storage-fill" id="storageFill" style="width:0%"></div></div>
+    <svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none">
+      <polyline points="0,60 50,45 100,70 150,30 200,50 250,25 300,40"
+        fill="none" stroke="#9B7BFF" stroke-width="2.2" stroke-linejoin="round"/>
+      <polyline points="0,50 50,35 100,55 150,20 200,40 250,15 300,30"
+        fill="none" stroke="#00E5AA" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="5,3"/>
+      <text x="0" y="98" fill="#7B748A" font-size="9" font-family="Poppins">Mon</text>
+      <text x="42" y="98" fill="#7B748A" font-size="9" font-family="Poppins">Tue</text>
+      <text x="92" y="98" fill="#7B748A" font-size="9" font-family="Poppins">Wed</text>
+      <text x="142" y="98" fill="#7B748A" font-size="9" font-family="Poppins">Thu</text>
+      <text x="192" y="98" fill="#7B748A" font-size="9" font-family="Poppins">Fri</text>
+      <text x="242" y="98" fill="#7B748A" font-size="9" font-family="Poppins">Sat</text>
+      <text x="282" y="98" fill="#7B748A" font-size="9" font-family="Poppins">Sun</text>
+    </svg>
+  </div>
+
+  <div class="mood-summary-card">
+    <div class="ms-icon">😊</div>
+    <div>
+      <div class="ms-title">Great Week! 🎉</div>
+      <div class="ms-sub">Your mood was positive on 4 out of 7 days.</div>
     </div>
   </div>
 
-  <!-- CONTENT -->
-  <div id="content">
+  <div class="insight-tip">
+    <div class="it-icon">💡</div>
+    <div class="it-text"><strong>Insight for You:</strong><br>Your mood is better on days when screen time is under 4h.</div>
+  </div>
 
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('notes',null)" id="tab-notes">Notes</button>
-      <button class="tab" onclick="switchTab('chat',null)" id="tab-chat">AI Chat</button>
-      <button class="tab" onclick="switchTab('aihub',null)" id="tab-aihub">AI Hub</button>
-      <div class="tab-plus" onclick="openEditor()" title="New note">+</div>
+  <div class="sec-hdr"><span class="sec-title">Unique Features</span></div>
+  <div style="padding:0 1rem 1rem;display:flex;flex-direction:column;gap:10px;" id="features-list"></div>
+</div>
+
+<!-- ════════════ PROFILE ════════════ -->
+<div id="s-profile" class="screen">
+  <div class="profile-header">
+    <div class="profile-avatar">C</div>
+    <div>
+      <div class="profile-name">Chandan</div>
+      <div class="profile-email">chandan@gmail.com</div>
     </div>
+    <div style="margin-left:auto;font-size:12px;color:var(--p2);background:rgba(123,94,232,0.12);padding:5px 14px;border-radius:20px;border:1px solid rgba(123,94,232,0.3);cursor:pointer;" onclick="showToast('Edit profile coming soon ✏️')">Edit ›</div>
+  </div>
 
-    <!-- ═══ NOTES VIEW ═══ -->
-    <div class="view active" id="view-notes">
-      <div class="notes-toolbar">
-        <button class="btn primary" onclick="openEditor()">✦ New Note</button>
-        <button class="btn" onclick="triggerUpload()">⬆ Upload File</button>
-        <input type="file" id="fileInput" accept=".md,.txt,.text,.markdown" multiple onchange="handleUpload(event)">
-        <div class="toolbar-gap"></div>
-        <select class="sort-sel" onchange="sortNotes(this.value)">
-          <option value="date">Latest first</option>
-          <option value="alpha">A → Z</option>
-          <option value="tag">By tag</option>
-          <option value="len">By length</option>
-        </select>
-        <div class="view-toggle">
-          <button class="vt-btn on" id="btnGrid" onclick="setView('grid')" title="Grid view">⊞</button>
-          <button class="vt-btn" id="btnList" onclick="setView('list')" title="List view">☰</button>
-        </div>
-      </div>
-      <div class="stats-row">
-        <div class="stat"><b id="stNotes">0</b> notes</div>
-        <div class="stat-sep"></div>
-        <div class="stat"><b id="stWords">0</b> words indexed</div>
-        <div class="stat-sep"></div>
-        <div class="sync-dot">Supabase synced</div>
-      </div>
-
-      <div class="upload-zone" id="uploadZone" onclick="triggerUpload()"
-        ondragover="e.preventDefault();this.classList.add('drag')"
-        ondragleave="this.classList.remove('drag')"
-        ondrop="handleDrop(event)">
-        <div class="uz-icon">📄</div>
-        <div class="uz-text">Drop Markdown / Text files here</div>
-        <div class="uz-sub">.md · .txt · .markdown</div>
-      </div>
-
-      <div class="notes-grid" id="notesGrid"></div>
-      <div class="notes-list-wrap" id="notesList" style="display:none"></div>
+  <div style="margin:0 1rem 1rem;">
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;">
+      <div class="stat-box"><div class="sv" style="color:var(--p2);">5h 20m</div><div class="sl">Today</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--green);">87%</div><div class="sl">Goal Hit</div></div>
+      <div class="stat-box"><div class="sv" style="color:var(--amber);">7 days</div><div class="sl">Streak</div></div>
     </div>
+  </div>
 
-    <!-- ═══ AI CHAT VIEW ═══ -->
-    <div class="view" id="view-chat">
-      <div class="chat-wrap">
-        <div class="ctx-pill">
-          <div class="ctx-dot"></div>
-          <span id="ctxLabel">0 notes loaded as context · RAG enabled</span>
-        </div>
-        <div class="chat-msgs" id="chatMsgs">
-          <div class="msg ai">
-            <div class="msg-av ai">🧠</div>
-            <div class="msg-body">
-              <div class="msg-bubble">Hi! I'm your <strong>PersonalBrain AI</strong>. I search through all your notes and synthesise accurate answers using RAG (Retrieval-Augmented Generation). Ask me anything — I'll cite exactly which notes I used.</div>
-              <div class="source-chips">
-                <span class="src-chip">GPT-4o powered</span>
-                <span class="src-chip">RAG enabled</span>
-                <span class="src-chip">Note-aware</span>
-              </div>
-              <div class="msg-meta">Just now</div>
-            </div>
-          </div>
-        </div>
-        <div class="chat-input-area">
-          <div class="chat-box">
-            <textarea class="chat-ta" id="chatTa" rows="1" placeholder="Ask anything about your notes…" onkeydown="chatKey(event)" oninput="autoH(this)"></textarea>
-            <button class="send-btn" onclick="sendChat()">↑</button>
-          </div>
-          <div class="chat-hint">Searches all your notes · Powered by OpenAI GPT-4o via Supabase Edge Functions</div>
-        </div>
+  <div class="settings-section">
+    <div class="settings-label">Preferences</div>
+    <div class="settings-group">
+      <div class="setting-row" onclick="showToast('Daily Goal: 6h 00m ⏱')">
+        <div class="sr-icon" style="background:rgba(123,94,232,0.2);">🎯</div>
+        <div class="sr-name">Daily Goal</div>
+        <div class="sr-val">6h 00m ›</div>
+      </div>
+      <div class="setting-row">
+        <div class="sr-icon" style="background:rgba(0,212,255,0.15);">🔔</div>
+        <div class="sr-name">Focus Reminders</div>
+        <div class="toggle2 on" onclick="toggleSetting(this,'Focus Reminders')"></div>
+      </div>
+      <div class="setting-row" onclick="showToast('Bedtime: 11:00 PM 🌙')">
+        <div class="sr-icon" style="background:rgba(0,229,170,0.15);">🌙</div>
+        <div class="sr-name">Bedtime Reminder</div>
+        <div class="sr-val">11:00 PM ›</div>
+      </div>
+      <div class="setting-row">
+        <div class="sr-icon" style="background:rgba(255,179,71,0.15);">📊</div>
+        <div class="sr-name">Mood Tracking</div>
+        <div class="toggle2 on" onclick="toggleSetting(this,'Mood Tracking')"></div>
+      </div>
+      <!-- ✅ DARK MODE — fully wired to toggleDarkMode() -->
+      <div class="setting-row">
+        <div class="sr-icon" style="background:rgba(123,94,232,0.2);">🌑</div>
+        <div class="sr-name">Dark Mode</div>
+        <div class="toggle2 on" id="dark-mode-toggle" onclick="toggleDarkMode()"></div>
       </div>
     </div>
+  </div>
 
-    <!-- ═══ AI HUB VIEW ═══ -->
-    <div class="view" id="view-aihub">
-      <div class="aihub-wrap">
-        <div class="aihub-grid">
-          <div class="ai-card picked" onclick="pickAI(this,'ChatGPT','https://chat.openai.com')">
-            <div class="ai-emoji">🤖</div>
-            <div class="ai-name">ChatGPT</div>
-            <div class="ai-desc">GPT-4o · General purpose AI with broad knowledge and strong reasoning</div>
-            <span class="ai-badge">Available</span>
-          </div>
-          <div class="ai-card" onclick="pickAI(this,'Gemini','https://gemini.google.com')">
-            <div class="ai-emoji">✦</div>
-            <div class="ai-name">Gemini</div>
-            <div class="ai-desc">Google's multimodal AI · Excels at research, analysis, and code</div>
-            <span class="ai-badge">Available</span>
-          </div>
-          <div class="ai-card" onclick="pickAI(this,'Claude','https://claude.ai')">
-            <div class="ai-emoji">⬡</div>
-            <div class="ai-name">Claude</div>
-            <div class="ai-desc">Anthropic's AI · Writing, coding, nuanced thinking</div>
-            <span class="ai-badge">Available</span>
-          </div>
-        </div>
-        <div class="aihub-panel">
-          <div class="aihub-panel-icon">🚀</div>
-          <div class="aihub-panel-title" id="aiPanelTitle">Open ChatGPT</div>
-          <div class="aihub-panel-sub">Browsers block cross-origin iframes for security. Click below to open your chosen AI in a new tab — copy your note content and paste it there for context.</div>
-          <button class="aihub-open-btn" id="aiOpenBtn" onclick="openAI()">Open ChatGPT ↗</button>
-        </div>
+  <div class="settings-section" style="margin-top:0.75rem;">
+    <div class="settings-label">More</div>
+    <div class="settings-group">
+      <div class="setting-row" onclick="showToast('App Lock coming soon 🔒')">
+        <div class="sr-icon" style="background:rgba(255,107,157,0.15);">🔒</div>
+        <div class="sr-name">App Lock</div>
+        <div class="sr-val">Off ›</div>
+      </div>
+      <div class="setting-row" onclick="showToast('Data & Privacy settings 🛡️')">
+        <div class="sr-icon" style="background:rgba(0,212,255,0.15);">🛡️</div>
+        <div class="sr-name">Data & Privacy</div>
+        <div class="sr-val">›</div>
+      </div>
+      <div class="setting-row" onclick="showToast('Made with ❤️ by Chandan')">
+        <div class="sr-icon" style="background:rgba(0,229,170,0.15);">ℹ️</div>
+        <div class="sr-name">About Us</div>
+        <div class="sr-val">›</div>
       </div>
     </div>
+  </div>
 
-  </div><!-- /content -->
+  <!-- SHARE SECTION -->
+  <div style="margin:1rem;padding:1rem;background:var(--card);border-radius:14px;border:1px solid rgba(123,94,232,0.25);">
+    <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;">🔗 Share This App</div>
+    <div style="display:flex;gap:8px;align-items:center;background:var(--bg0);border:1px solid rgba(123,94,232,0.3);border-radius:10px;padding:8px 12px;margin-bottom:10px;">
+      <span style="flex:1;font-size:11px;color:var(--p3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="share-url">https://chandan-screentime.netlify.app</span>
+      <button onclick="copyURL()" style="background:var(--p1);border:none;border-radius:7px;color:white;font-size:11px;font-weight:600;padding:5px 12px;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='var(--p2)'" onmouseout="this.style.background='var(--p1)'">Copy</button>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="shareWhatsApp()" style="flex:1;padding:9px;border-radius:10px;border:1px solid rgba(37,211,102,0.3);background:rgba(37,211,102,0.08);color:#25D366;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(37,211,102,0.2)'" onmouseout="this.style.background='rgba(37,211,102,0.08)'">💬 WhatsApp</button>
+      <button onclick="shareTwitter()" style="flex:1;padding:9px;border-radius:10px;border:1px solid rgba(29,161,242,0.3);background:rgba(29,161,242,0.08);color:#1DA1F2;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(29,161,242,0.2)'" onmouseout="this.style.background='rgba(29,161,242,0.08)'">🐦 Twitter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ BOTTOM NAV ════════════ -->
+<div class="bnav">
+  <div class="bn active" onclick="switchNav('home')" id="bn-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </div>
+  <div class="bn" onclick="switchNav('usage')" id="bn-usage">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    <span>Usage</span>
+  </div>
+  <div class="bn" onclick="switchNav('focus')" id="bn-focus">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+    <span>Focus</span>
+  </div>
+  <div class="bn" onclick="switchNav('insights')" id="bn-insights">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span>Insights</span>
+  </div>
+  <div class="bn" onclick="switchNav('profile')" id="bn-profile">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Profile</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 </div><!-- /app -->
 
-<!-- ═══ EDITOR MODAL ═══ -->
-<div class="overlay" id="editorOverlay" onclick="overlayClick(event)">
-  <div class="modal" id="editorModal">
-    <div class="modal-head">
-      <input class="modal-title-inp" id="eTitleInp" type="text" placeholder="Note title…" maxlength="120">
-      <button class="modal-x" onclick="closeEditor()">✕</button>
-    </div>
-    <div class="md-toolbar">
-      <button class="md-btn" onclick="ins('**','**')" title="Bold"><b>B</b></button>
-      <button class="md-btn" onclick="ins('*','*')" title="Italic"><i>I</i></button>
-      <button class="md-btn" onclick="ins('~~','~~')" title="Strikethrough"><s>S</s></button>
-      <button class="md-btn" onclick="ins('`','`')" title="Inline code" style="font-family:var(--mono)">&lt;/&gt;</button>
-      <div class="md-sep"></div>
-      <button class="md-btn" onclick="ins('# ','')">H1</button>
-      <button class="md-btn" onclick="ins('## ','')">H2</button>
-      <button class="md-btn" onclick="ins('### ','')">H3</button>
-      <div class="md-sep"></div>
-      <button class="md-btn" onclick="ins('- ','')">List</button>
-      <button class="md-btn" onclick="ins('- [ ] ','')">Task</button>
-      <button class="md-btn" onclick="ins('> ','')">Quote</button>
-      <button class="md-btn" onclick="ins('```\n','\n```')">Block</button>
-      <button class="md-btn" onclick="ins('[','](url)')">Link</button>
-      <div class="md-sep"></div>
-      <button class="md-btn" onclick="ins('---\n','')">HR</button>
-    </div>
-    <div class="modal-editor">
-      <textarea class="modal-textarea" id="eContentTa" placeholder="Start writing in Markdown…&#10;&#10;# My Note&#10;&#10;Use **bold**, *italic*, `code`, lists, and more." oninput="wcUpdate()"></textarea>
-    </div>
-    <div class="modal-foot">
-      <div>
-        <div class="tag-row" id="tagRow">
-          <button class="tag-pill sel" onclick="selTag(this,'Research')">Research</button>
-          <button class="tag-pill" onclick="selTag(this,'Ideas')">Ideas</button>
-          <button class="tag-pill" onclick="selTag(this,'Tasks')">Tasks</button>
-          <button class="tag-pill" onclick="selTag(this,'Misc')">Misc</button>
-        </div>
-        <div style="margin-top:6px"><span class="wc-label" id="wcLabel">0 words</span></div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn" onclick="closeEditor()">Cancel</button>
-        <button class="btn primary" onclick="saveNote()">✦ Save Note</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ CONTEXT MENU ═══ -->
-<div id="ctxMenu" class="ctx-menu" style="display:none"></div>
-
-<!-- ═══ TOAST ═══ -->
-<div id="toast"><span id="toastIcon">✓</span><span id="toastMsg"></span></div>
-
 <script>
-/* ─────────────────── DATA ─────────────────── */
-const TAG_CFG = {
-  Research:{ bar:'var(--v)', bg:'var(--v3)', color:'var(--v2)', border:'rgba(124,111,255,.25)' },
-  Ideas:   { bar:'var(--g)', bg:'var(--g2)', color:'var(--g)',  border:'rgba(52,211,153,.25)' },
-  Tasks:   { bar:'var(--a)', bg:'var(--a2)', color:'var(--a)',  border:'rgba(251,191,36,.25)' },
-  Misc:    { bar:'var(--c)', bg:'var(--c2)', color:'var(--c)',  border:'rgba(34,211,238,.25)' },
+/* ═══════════════════════════════════════
+   REAL BRAND LOGOS as inline SVGs
+   Each logo is the official brand icon
+═══════════════════════════════════════ */
+const BRAND_LOGOS = {
+
+  Instagram: `<svg viewBox="0 0 24 24" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="ig-g1" cx="30%" cy="107%" r="150%">
+        <stop offset="0%" stop-color="#fdf497"/>
+        <stop offset="5%" stop-color="#fdf497"/>
+        <stop offset="45%" stop-color="#fd5949"/>
+        <stop offset="60%" stop-color="#d6249f"/>
+        <stop offset="90%" stop-color="#285AEB"/>
+      </radialGradient>
+    </defs>
+    <rect width="24" height="24" rx="6" fill="url(#ig-g1)"/>
+    <rect x="6.5" y="6.5" width="11" height="11" rx="3" fill="none" stroke="white" stroke-width="1.5"/>
+    <circle cx="12" cy="12" r="3" fill="none" stroke="white" stroke-width="1.5"/>
+    <circle cx="16.5" cy="7.5" r="0.9" fill="white"/>
+  </svg>`,
+
+  YouTube: `<svg viewBox="0 0 24 24" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="5" fill="#FF0000"/>
+    <path d="M19.5 8.5s-.2-1.3-.8-1.9c-.7-.8-1.5-.8-1.9-.8C14.5 5.7 12 5.7 12 5.7s-2.5 0-4.8.1c-.4 0-1.2 0-1.9.8-.6.6-.8 1.9-.8 1.9S4.3 10 4.3 11.5v1.4c0 1.5.2 3 .2 3s.2 1.3.8 1.9c.7.8 1.7.7 2.1.8C8.7 18.7 12 18.7 12 18.7s2.5 0 4.8-.2c.4 0 1.2 0 1.9-.8.6-.6.8-1.9.8-1.9s.2-1.5.2-3v-1.4C19.7 10 19.5 8.5 19.5 8.5zM10.2 14.4V9.6l5.2 2.4-5.2 2.4z" fill="white"/>
+  </svg>`,
+
+  WhatsApp: `<svg viewBox="0 0 24 24" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="6" fill="#25D366"/>
+    <path d="M12 4.5A7.5 7.5 0 0 0 5.5 15.8L4.5 19.5l3.8-1A7.5 7.5 0 1 0 12 4.5zm0 13.5a6 6 0 0 1-3-.8l-.2-.1-2.2.6.6-2.1-.1-.2A6 6 0 1 1 12 18zm3.3-4.4c-.2-.1-1-.5-1.1-.5-.2-.1-.3-.1-.4.1-.1.2-.5.5-.6.7-.1.1-.2.1-.4 0-.2-.1-.8-.3-1.5-1a5.6 5.6 0 0 1-1-1.3c-.1-.2 0-.3.1-.4l.3-.4.2-.3v-.3l-.5-1.2c-.1-.3-.3-.3-.4-.3h-.3c-.2 0-.4.1-.6.3C9 10.3 8.5 11 8.5 12c0 1 .8 2 .9 2.2.1.1 1.5 2.4 3.7 3.2.5.2 1 .3 1.3.4.6.1 1.1.1 1.5 0 .5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1 0-.1-.2-.2-.4-.3z" fill="white"/>
+  </svg>`,
+
+  Chrome: `<svg viewBox="0 0 24 24" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="12" fill="white"/>
+    <!-- Red top arc -->
+    <path d="M12 4 A8 8 0 0 1 19 8 L12 8 A4 4 0 0 0 5 8 L5 8 A8 8 0 0 1 12 4Z" fill="#EA4335"/>
+    <!-- Blue right arc -->
+    <path d="M19 8 A8 8 0 0 1 20 12 A8 8 0 0 1 15.5 18.9 L12 13 A4 4 0 0 0 16 9 L16 9Z" fill="#FBBC05"/>
+    <!-- Green bottom arc -->
+    <path d="M15.5 18.9 A8 8 0 0 1 4 12 A8 8 0 0 1 5 8 L8.5 13 A4 4 0 0 0 12 16 L12 16Z" fill="#34A853"/>
+    <circle cx="12" cy="12" r="4" fill="#4285F4"/>
+    <circle cx="12" cy="12" r="2.5" fill="white"/>
+  </svg>`,
+
+  Spotify: `<svg viewBox="0 0 24 24" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="12" fill="#1DB954"/>
+    <path d="M16.8 10.8c-2.7-1.6-7.2-1.8-9.8-1-.4.1-.8-.1-.9-.5-.1-.4.1-.8.5-.9 3-.9 7.9-.7 11 1.1.4.2.5.7.3 1-.2.4-.7.5-1.1.3zM16.5 13c-.2.3-.6.5-1 .3-2.2-1.4-5.6-1.8-8.3-1-.3.1-.7-.1-.8-.4-.1-.3.1-.7.4-.8 3-.9 6.8-.5 9.3 1.1.4.2.5.5.4.8zM15.6 15.2c-.2.2-.5.3-.7.2-2-1.2-4.5-1.5-7.4-.8-.3.1-.5-.1-.6-.4-.1-.3.1-.5.4-.6 3.2-.7 5.9-.4 8.1 1 .2.1.3.4.2.6z" fill="white"/>
+  </svg>`,
+
+  Gmail: `<svg viewBox="0 0 24 24" width="28" height="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 6C2 5 2.9 4 4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6z" fill="white"/>
+    <path d="M2 6l10 7 10-7" fill="none" stroke="#EA4335" stroke-width="1"/>
+    <path d="M4 4l8 7 8-7" fill="#EA4335"/>
+    <path d="M2 6v12h4V10L2 6z" fill="#34A853"/>
+    <path d="M22 6v12h-4V10l4-4z" fill="#FBBC05"/>
+    <path d="M6 10v8h12V10L12 15 6 10z" fill="#4285F4"/>
+  </svg>`
+};
+
+/* ═══════════════════════════════════════
+   APP DATA — minutes each app was used
+═══════════════════════════════════════ */
+const apps = [
+  { name:'Instagram', mins:105, color:'#E1306C', opens:34 },
+  { name:'YouTube',   mins:75,  color:'#FF0000', opens:12 },
+  { name:'WhatsApp',  mins:45,  color:'#25D366', opens:56 },
+  { name:'Chrome',    mins:30,  color:'#4285F4', opens:22 },
+  { name:'Spotify',   mins:25,  color:'#1DB954', opens:8  },
+  { name:'Gmail',     mins:20,  color:'#EA4335', opens:15 },
+];
+const pcts  = ['33%','24%','14%','9%','8%','5%'];
+const total = apps.reduce((a,b) => a + b.mins, 0);
+
+// Format minutes → "Xh Ym"
+function fmtT(m) {
+  const h = Math.floor(m/60), mm = m%60;
+  if (h > 0 && mm > 0) return `${h}h ${mm}m`;
+  if (h > 0) return `${h}h`;
+  return `${mm}m`;
 }
 
-let notes = [
-  {id:1,title:'Welcome to PersonalBrain',content:'# Welcome to PersonalBrain\n\nYour **second brain** — capture, organise, and retrieve all your knowledge in one place.\n\n## Key Features\n- Upload markdown or plain-text notes\n- AI-powered semantic search\n- Chat with your entire knowledge base\n- Tag and filter system\n\n> Start by creating a new note or uploading files.',tag:'Research',created:Date.now()-86400e3*0.1},
-  {id:2,title:'Machine Learning Fundamentals',content:'# ML Fundamentals\n\n**Supervised learning** trains on labelled data. Core algorithms:\n- Linear Regression\n- Decision Trees  \n- Neural Networks\n- Gradient Boosted Trees\n\n## Vector Embeddings\n\nEmbeddings represent text as dense numeric vectors. Similar content clusters nearby in vector space — this powers semantic search.\n\n```python\nimport openai\nres = openai.embeddings.create(model="text-embedding-3-small", input=text)\n```',tag:'Research',created:Date.now()-86400e3*2},
-  {id:3,title:'App Ideas — Q3 2025',content:'## Product Ideas\n\n1. AI journaling app with emotion tracking\n2. Collaborative mind-mapping with real-time sync\n3. Knowledge graph visualiser for Markdown\n4. Voice-to-note with auto-tagging\n\n### Tech Stack Ideas\n- Supabase + pgvector for semantic search\n- Next.js 14 App Router\n- Framer Motion for animations\n\n**Priority:** Ship small → validate → iterate',tag:'Ideas',created:Date.now()-86400e3*3},
-  {id:4,title:'Sprint Tasks — This Week',content:'## Sprint Goals\n\n- [x] Set up Next.js 14 project\n- [x] Configure Supabase database\n- [ ] Build note editor with markdown support\n- [ ] Implement vector search\n- [ ] Connect OpenAI API\n- [ ] Ship MVP to users\n\n**Focus:** Done > perfect',tag:'Tasks',created:Date.now()-86400e3*1},
-  {id:5,title:'Supabase & pgvector Setup',content:'# Supabase Setup\n\n```sql\nCREATE EXTENSION IF NOT EXISTS vector;\n\nCREATE TABLE notes (\n  id        uuid PRIMARY KEY DEFAULT gen_random_uuid(),\n  title     text NOT NULL,\n  content   text NOT NULL,\n  tag       text DEFAULT \'Misc\',\n  embedding vector(1536),\n  created_at timestamptz DEFAULT now()\n);\n```\n\n## Vector Search Function\n\n```sql\nCREATE FUNCTION match_notes(\n  query_embedding vector(1536),\n  match_count int\n) RETURNS SETOF notes AS $$\n  SELECT * FROM notes\n  ORDER BY embedding <=> query_embedding\n  LIMIT match_count;\n$$ LANGUAGE sql;\n```',tag:'Misc',created:Date.now()-86400e3*4},
-]
-
-let sortMode='date', viewMode='grid', filterTagActive=null, editingId=null, selTag_val='Research'
-let selectedAI='ChatGPT', selectedAIUrl='https://chat.openai.com'
-let chatHistory=[]
-
-/* ─────────────────── RENDERING ─────────────────── */
-function renderNotes(subset){
-  const data = subset ?? getDisplayNotes()
-  updateStats(data)
-
-  if(viewMode==='grid'){
-    document.getElementById('notesGrid').style.display='grid'
-    document.getElementById('notesList').style.display='none'
-    document.getElementById('notesGrid').innerHTML = data.length ? data.map((n,i)=>cardHTML(n,i)).join('') : emptyHTML()
-  } else {
-    document.getElementById('notesGrid').style.display='none'
-    document.getElementById('notesList').style.display='block'
-    document.getElementById('notesList').innerHTML = data.length ? data.map((n,i)=>listItemHTML(n,i)).join('') : emptyHTML()
-  }
-
-  updateBadges()
-  renderRecent()
-  updateStorage()
-}
-
-function getDisplayNotes(){
-  let d = filterTagActive ? notes.filter(n=>n.tag===filterTagActive) : [...notes]
-  if(sortMode==='alpha') d.sort((a,b)=>a.title.localeCompare(b.title))
-  else if(sortMode==='tag') d.sort((a,b)=>a.tag.localeCompare(b.tag))
-  else if(sortMode==='len') d.sort((a,b)=>b.content.length-a.content.length)
-  else d.sort((a,b)=>b.created-a.created)
-  return d
-}
-
-function cardHTML(n,i){
-  const cfg=TAG_CFG[n.tag]||TAG_CFG.Misc
-  const prev=n.content.replace(/#+\s/g,'').replace(/```[\s\S]*?```/g,'[code]').replace(/[*_`\[\]>]/g,'').replace(/\n+/g,' ').trim()
-  const delay=Math.min(i*0.04,0.4)
-  return `<div class="note-card" style="animation-delay:${delay}s" onclick="openNote(${n.id})">
-    <div class="note-card-bar" style="background:${cfg.bar}"></div>
-    <div class="nc-body">
-      <div class="nc-header">
-        <div class="nc-title">${esc(n.title)}</div>
-        <button class="nc-menu" onclick="showCtxMenu(event,${n.id})">⋯</button>
+/* ═══════════════════════════════════════
+   RENDER HOME — top 3 apps with brand logo + hours
+═══════════════════════════════════════ */
+function renderHomeApps() {
+  document.getElementById('home-apps').innerHTML = apps.slice(0,3).map((a,i) => {
+    const pct = Math.round((a.mins/total)*100);
+    const logo = BRAND_LOGOS[a.name] || `<span style="font-size:22px">${['📸','▶️','💬','🌐','🎵','📧'][i]}</span>`;
+    return `<div class="app-row">
+      <div class="aicon" style="background:${a.color}18;">${logo}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="aname">${a.name}</div>
+        <div class="abar-wrap" style="width:100%;"><div class="abar" style="width:${pct}%;background:linear-gradient(90deg,${a.color},${a.color}88);"></div></div>
       </div>
-      <div class="nc-preview">${esc(prev.slice(0,180))}</div>
-      <div class="nc-footer">
-        <span class="nc-tag" style="background:${cfg.bg};color:${cfg.color};border-color:${cfg.border}">${n.tag}</span>
-        <span class="nc-date">${fmtDate(n.created)}</span>
+      <div style="text-align:right;">
+        <div class="atime">${fmtT(a.mins)}</div>
+        <div class="apct">${pcts[i]}</div>
       </div>
-    </div>
-  </div>`
+    </div>`;
+  }).join('');
 }
 
-function listItemHTML(n,i){
-  const cfg=TAG_CFG[n.tag]||TAG_CFG.Misc
-  const prev=n.content.replace(/#+\s/g,'').replace(/```[\s\S]*?```/g,'').replace(/[*_`\[\]>]/g,'').replace(/\n+/g,' ').trim()
-  return `<div class="note-list-item" style="animation-delay:${Math.min(i*.035,.4)}s" onclick="openNote(${n.id})">
-    <div class="nli-bar" style="background:${cfg.bar}"></div>
-    <div class="nli-body">
-      <div class="nli-title">${esc(n.title)}</div>
-      <div class="nli-preview">${esc(prev.slice(0,100))}</div>
-    </div>
-    <div class="nli-meta">
-      <span class="nc-tag" style="background:${cfg.bg};color:${cfg.color};border-color:${cfg.border}">${n.tag}</span>
-      <span class="nc-date">${fmtDate(n.created)}</span>
-      <button class="nc-menu" style="opacity:1;font-size:15px;background:transparent;border:none;cursor:pointer;color:var(--txt3)" onclick="showCtxMenu(event,${n.id})">⋯</button>
-    </div>
-  </div>`
+/* ═══════════════════════════════════════
+   RENDER USAGE — all apps with brand logo + exact hours
+═══════════════════════════════════════ */
+function renderUsageApps() {
+  document.getElementById('usage-apps').innerHTML = apps.map((a,i) => {
+    const pct = Math.round((a.mins/total)*100);
+    const logo = BRAND_LOGOS[a.name] || `<span style="font-size:22px">${['📸','▶️','💬','🌐','🎵','📧'][i]}</span>`;
+    return `<div class="app-row">
+      <div class="aicon" style="background:${a.color}18;">${logo}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="aname">${a.name}</div>
+        <div class="abar-wrap" style="width:100%;"><div class="abar" style="width:${pct}%;background:linear-gradient(90deg,${a.color},${a.color}88);"></div></div>
+        <div class="apct" style="margin-top:3px;">${a.opens} opens today</div>
+      </div>
+      <div style="text-align:right;min-width:55px;">
+        <div class="atime">${fmtT(a.mins)}</div>
+        <div class="apct">${pcts[i]}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
-function emptyHTML(){
-  return `<div class="empty-state" style="grid-column:1/-1">
-    <div class="es-icon">📭</div>
-    <div class="es-title">No notes found</div>
-    <div class="es-sub">Try a different filter, or create a new note to get started.</div>
-    <button class="btn primary" style="margin-top:12px" onclick="openEditor()">✦ New Note</button>
-  </div>`
+/* ═══════════════════════════════════════
+   HOURLY BARS
+═══════════════════════════════════════ */
+function renderHourlyBars() {
+  const data = Array.from({length:24}, (_,h) => {
+    if (h < 7)  return 2;
+    if (h >= 7  && h <= 9)  return 40 + Math.random()*20;
+    if (h >= 10 && h <= 12) return 30 + Math.random()*20;
+    if (h >= 13 && h <= 14) return 50 + Math.random()*20;
+    if (h >= 15 && h <= 18) return 35 + Math.random()*25;
+    if (h >= 19 && h <= 22) return 62 + Math.random()*28;
+    return 5 + Math.random()*10;
+  });
+  const mx = Math.max(...data);
+  const colors = ['#7B5EE8','#9B7BFF','#00D4FF','#00E5AA'];
+  document.getElementById('hourly-bars').innerHTML = data.map((v,i) => {
+    const ht = Math.round((v/mx)*72)+4;
+    return `<div class="hb" style="height:${ht}px;background:${colors[i%4]};opacity:${(0.45+0.55*(v/mx)).toFixed(2)};"></div>`;
+  }).join('');
 }
 
-function updateStats(data){
-  const d = data ?? getDisplayNotes()
-  document.getElementById('stNotes').textContent = d.length
-  const words = notes.reduce((s,n)=>s+n.content.split(/\s+/).length,0)
-  document.getElementById('stWords').textContent = words.toLocaleString()
+/* ═══════════════════════════════════════
+   FOCUS HISTORY
+═══════════════════════════════════════ */
+function renderFocusHistory() {
+  const items = [
+    {day:'Today',    time:'8:30 PM', dur:'25 min', score:'92%', color:'#7B5EE8'},
+    {day:'Today',    time:'2:00 PM', dur:'50 min', score:'78%', color:'#00D4FF'},
+    {day:'Yesterday',time:'9:00 PM', dur:'25 min', score:'88%', color:'#00E5AA'},
+  ];
+  document.getElementById('focus-history').innerHTML = items.map(i => `
+    <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card);border-radius:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='var(--card)'">
+      <div style="width:38px;height:38px;border-radius:50%;background:${i.color}22;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">⏱</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:500;color:var(--text);">${i.day} · ${i.time}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">${i.dur} focus session</div>
+      </div>
+      <div style="font-size:15px;font-weight:700;color:${i.color};">${i.score}</div>
+    </div>`).join('');
 }
 
-function updateBadges(){
-  document.getElementById('notesBadge').textContent = notes.length
-  document.getElementById('allBadge').textContent = notes.length
-  ;['Research','Ideas','Tasks','Misc'].forEach(t=>{
-    const el=document.getElementById('b-'+t)
-    if(el) el.textContent=notes.filter(n=>n.tag===t).length
-  })
-  document.getElementById('ctxLabel').textContent=`${notes.length} notes loaded as context · RAG enabled`
+/* ═══════════════════════════════════════
+   FEATURES
+═══════════════════════════════════════ */
+function renderFeatures() {
+  const fs = [
+    {icon:'🤖', color:'#9B7BFF', title:'AI Mood Detection',           sub:'Detects your mood based on usage pattern.'},
+    {icon:'📈', color:'#00D4FF', title:'Mood vs Screen Time Insights', sub:'See how your screen time affects your mood.'},
+    {icon:'🎯', color:'#00E5AA', title:'Smart Focus Mode',             sub:'AI suggests best focus time based on your habits.'},
+    {icon:'⭐', color:'#FFB347', title:'Daily Habit Score',            sub:'Get a productivity score every day.'},
+    {icon:'💝', color:'#FF6B9D', title:'Personalized Tips',            sub:'AI gives tips to improve your digital well-being.'},
+  ];
+  document.getElementById('features-list').innerHTML = fs.map(f => `
+    <div style="display:flex;align-items:flex-start;gap:12px;padding:13px;background:var(--card);border-radius:14px;border:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='var(--card)'">
+      <div style="width:44px;height:44px;border-radius:50%;background:${f.color}22;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">${f.icon}</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--text);">${f.title}</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.55;">${f.sub}</div>
+      </div>
+    </div>`).join('');
 }
 
-function renderRecent(){
-  const recent=notes.slice().sort((a,b)=>b.created-a.created).slice(0,4)
-  document.getElementById('recentList').innerHTML=recent.map(n=>`
-    <div class="tag-nav" onclick="openNote(${n.id})" style="font-size:12px">
-      <div class="tag-dot" style="background:${TAG_CFG[n.tag]?.bar||'var(--txt3)'}"></div>
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${esc(n.title)}</span>
-    </div>`).join('')
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+function switchNav(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.bn').forEach(b => b.classList.remove('active'));
+  document.getElementById('s-'+screen).classList.add('active');
+  document.getElementById('bn-'+screen).classList.add('active');
+  window.scrollTo(0, 0);
 }
 
-function updateStorage(){
-  const words=notes.reduce((s,n)=>s+n.content.length,0)
-  const pct=Math.min(Math.round(words/50000*100),100)
-  document.getElementById('storagePct').textContent=pct+'%'
-  document.getElementById('storageFill').style.width=pct+'%'
-}
+/* ═══════════════════════════════════════
+   ✅ DARK MODE — fully working
+   Toggles data-theme on <html>, syncs
+   both the header button AND the settings
+   toggle switch simultaneously.
+═══════════════════════════════════════ */
+let isDark = true;
 
-/* ─────────────────── NAVIGATION ─────────────────── */
-function switchTab(tab, navEl){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'))
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'))
-  document.getElementById('tab-'+tab).classList.add('active')
-  document.getElementById('view-'+tab).classList.add('active')
-  if(navEl) navEl.classList.add('active')
-  else { const nb=document.getElementById('nav-'+tab); if(nb) nb.classList.add('active') }
-}
+function toggleDarkMode() {
+  isDark = !isDark;
+  const root = document.getElementById('root');
+  root.setAttribute('data-theme', isDark ? 'dark' : 'light');
 
-function filterTag(tag){
-  filterTagActive=tag
-  switchTab('notes')
-  renderNotes()
-}
+  // Update moon/sun icon in header
+  document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀️';
 
-function setView(mode){
-  viewMode=mode
-  document.getElementById('btnGrid').classList.toggle('on',mode==='grid')
-  document.getElementById('btnList').classList.toggle('on',mode==='list')
-  renderNotes()
-}
-
-function sortNotes(val){ sortMode=val; renderNotes() }
-
-/* ─────────────────── EDITOR ─────────────────── */
-function openEditor(){
-  editingId=null
-  document.getElementById('eTitleInp').value=''
-  document.getElementById('eContentTa').value=''
-  selTag_val='Research'
-  document.querySelectorAll('.tag-pill').forEach(p=>p.classList.toggle('sel',p.textContent==='Research'))
-  wcUpdate()
-  document.getElementById('editorOverlay').classList.add('open')
-  setTimeout(()=>document.getElementById('eTitleInp').focus(),120)
-}
-
-function openNote(id){
-  const n=notes.find(x=>x.id===id)
-  if(!n) return
-  editingId=id
-  document.getElementById('eTitleInp').value=n.title
-  document.getElementById('eContentTa').value=n.content
-  selTag_val=n.tag
-  document.querySelectorAll('.tag-pill').forEach(p=>p.classList.toggle('sel',p.textContent===n.tag))
-  wcUpdate()
-  document.getElementById('editorOverlay').classList.add('open')
-}
-
-function closeEditor(){ document.getElementById('editorOverlay').classList.remove('open') }
-function overlayClick(e){ if(e.target===document.getElementById('editorOverlay')) closeEditor() }
-
-function saveNote(){
-  const title=document.getElementById('eTitleInp').value.trim()
-  const content=document.getElementById('eContentTa').value.trim()
-  if(!title){ document.getElementById('eTitleInp').focus(); toast('⚠️','Add a title first','err'); return }
-  if(!content){ document.getElementById('eContentTa').focus(); toast('⚠️','Write some content first','err'); return }
-
-  if(editingId){
-    const n=notes.find(x=>x.id===editingId)
-    Object.assign(n,{title,content,tag:selTag_val,created:Date.now()})
-    toast('✦','Note updated!')
+  // Sync the settings toggle switch
+  const sw = document.getElementById('dark-mode-toggle');
+  if (isDark) {
+    sw.classList.add('on');
+    sw.classList.remove('off');
   } else {
-    notes.unshift({id:Date.now(),title,content,tag:selTag_val,created:Date.now()})
-    toast('✦','Note saved to your brain!')
+    sw.classList.add('off');
+    sw.classList.remove('on');
   }
-  closeEditor()
-  renderNotes()
+
+  showToast(isDark ? '🌙 Dark mode enabled' : '☀️ Light mode enabled');
 }
 
-function selTag(el,tag){
-  selTag_val=tag
-  document.querySelectorAll('.tag-pill').forEach(p=>p.classList.remove('sel'))
-  el.classList.add('sel')
+/* ═══════════════════════════════════════
+   SETTINGS TOGGLES (Focus, Mood etc.)
+═══════════════════════════════════════ */
+function toggleSetting(el, name) {
+  const isOn = el.classList.contains('on');
+  el.classList.toggle('on');
+  el.classList.toggle('off');
+  showToast(`${name}: ${isOn ? 'OFF 🔴' : 'ON 🟢'}`);
 }
 
-function wcUpdate(){
-  const wc=document.getElementById('eContentTa').value.trim().split(/\s+/).filter(Boolean).length
-  document.getElementById('wcLabel').textContent=wc+' words'
-}
+/* ═══════════════════════════════════════
+   FOCUS TIMER
+═══════════════════════════════════════ */
+let focusMins = 25;
+let focusRunning = false;
+let focusInterval = null;
+let focusSecondsLeft = 25 * 60;
+let completedSessions = 2;
+let totalFocusMins = 80;
 
-function ins(before,after){
-  const ta=document.getElementById('eContentTa')
-  const s=ta.selectionStart,e=ta.selectionEnd,sel=ta.value.slice(s,e)
-  ta.value=ta.value.slice(0,s)+before+sel+after+ta.value.slice(e)
-  ta.selectionStart=s+before.length
-  ta.selectionEnd=s+before.length+sel.length
-  ta.focus(); wcUpdate()
-}
+function setFocus(el, mins) {
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
 
-/* ─────────────────── CONTEXT MENU ─────────────────── */
-function showCtxMenu(e,id){
-  e.stopPropagation()
-  hideCtxMenu()
-  const menu=document.getElementById('ctxMenu')
-  menu.innerHTML=`
-    <div class="ctx-item" onclick="openNote(${id});hideCtxMenu()">✏️ Edit</div>
-    <div class="ctx-item" onclick="copyNote(${id})">📋 Copy content</div>
-    <div class="ctx-item" onclick="duplicateNote(${id})">⧉ Duplicate</div>
-    <div class="ctx-item danger" onclick="deleteNote(${id})">🗑 Delete</div>`
-  const x=Math.min(e.clientX,window.innerWidth-160)
-  const y=Math.min(e.clientY,window.innerHeight-160)
-  menu.style.cssText=`display:block;left:${x}px;top:${y}px`
-  setTimeout(()=>document.addEventListener('click',hideCtxMenu,{once:true}),10)
-}
-function hideCtxMenu(){ document.getElementById('ctxMenu').style.display='none' }
-
-function deleteNote(id){
-  hideCtxMenu()
-  notes=notes.filter(n=>n.id!==id)
-  renderNotes()
-  toast('🗑','Note deleted')
-}
-function copyNote(id){
-  hideCtxMenu()
-  const n=notes.find(x=>x.id===id)
-  if(n) navigator.clipboard.writeText(n.content).then(()=>toast('📋','Copied to clipboard')).catch(()=>toast('📋','Content ready'))
-}
-function duplicateNote(id){
-  hideCtxMenu()
-  const n=notes.find(x=>x.id===id)
-  if(!n) return
-  notes.unshift({...n,id:Date.now(),title:n.title+' (copy)',created:Date.now()})
-  renderNotes()
-  toast('⧉','Note duplicated')
-}
-
-/* ─────────────────── FILE UPLOAD ─────────────────── */
-function triggerUpload(){ document.getElementById('fileInput').click() }
-
-function handleUpload(e){
-  const files=Array.from(e.target.files)
-  if(!files.length) return
-  files.forEach(f=>readFile(f))
-  e.target.value=''
-}
-function handleDrop(e){
-  e.preventDefault()
-  document.getElementById('uploadZone').classList.remove('drag')
-  Array.from(e.dataTransfer.files).forEach(f=>readFile(f))
-}
-function readFile(f){
-  const r=new FileReader()
-  r.onload=ev=>{
-    const content=ev.target.result
-    const title=f.name.replace(/\.(md|txt|text|markdown)$/i,'')
-    const tag=title.toLowerCase().includes('task')||title.toLowerCase().includes('todo')?'Tasks':
-               title.toLowerCase().includes('idea')?'Ideas':'Misc'
-    notes.unshift({id:Date.now()+Math.random(),title,content,tag,created:Date.now()})
-    renderNotes()
-    toast('📄',`"${title}" uploaded!`)
+  if (mins === 0) {
+    const custom = parseInt(prompt('Enter minutes (1-120):', '30'));
+    if (custom && custom > 0 && custom <= 120) mins = custom;
+    else { el.classList.remove('active'); return; }
   }
-  r.readAsText(f)
+
+  // Reset if running
+  if (focusInterval) { clearInterval(focusInterval); focusInterval = null; }
+  focusMins = mins;
+  focusRunning = false;
+  focusSecondsLeft = mins * 60;
+  const btn = document.getElementById('start-btn');
+  btn.textContent = '▶ Start Focus Session';
+  btn.style.background = 'linear-gradient(90deg,var(--p1),var(--t2))';
+  showToast(`⏱ Timer set to ${mins} minutes`);
 }
 
-/* ─────────────────── SEARCH ─────────────────── */
-const gSearch=document.getElementById('gSearch')
-const searchDrop=document.getElementById('searchDrop')
+function startFocus() {
+  const btn = document.getElementById('start-btn');
 
-gSearch.addEventListener('input',function(){
-  const q=this.value.trim().toLowerCase()
-  if(!q){ searchDrop.classList.remove('open'); return }
-  const results=notes.filter(n=>
-    n.title.toLowerCase().includes(q)||n.content.toLowerCase().includes(q)
-  ).slice(0,6)
+  if (!focusRunning) {
+    // START
+    focusRunning = true;
+    btn.textContent = '⏸ Pause Session';
+    btn.style.background = 'linear-gradient(90deg,#00E5AA,#00B8D4)';
 
-  if(!results.length){
-    searchDrop.innerHTML=`<div class="sdrop-empty">No results for "<em>${esc(q)}</em>"</div>`
+    focusInterval = setInterval(() => {
+      focusSecondsLeft--;
+      const m = Math.floor(focusSecondsLeft / 60);
+      const s = focusSecondsLeft % 60;
+      btn.textContent = `⏸ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} — Pause`;
+
+      if (focusSecondsLeft <= 0) {
+        clearInterval(focusInterval);
+        focusInterval = null;
+        focusRunning = false;
+        completedSessions++;
+        totalFocusMins += focusMins;
+        document.getElementById('fs-count').textContent = completedSessions;
+        document.getElementById('fs-time').textContent = fmtT(totalFocusMins);
+        btn.textContent = '🎉 Session Done! Start Again';
+        btn.style.background = 'linear-gradient(90deg,#FFB347,#FF6B9D)';
+        showToast('🎉 Focus session complete! Great work!');
+        renderFocusHistory();
+      }
+    }, 1000);
+
   } else {
-    const hlRe=new RegExp(escRe(q),'gi')
-    searchDrop.innerHTML=results.map(n=>{
-      const idx=n.content.toLowerCase().indexOf(q)
-      const raw=idx>=0?'…'+n.content.slice(Math.max(0,idx-30),idx+70).replace(/\n/g,' ')+'…':n.content.slice(0,80)
-      const prev=esc(raw).replace(hlRe,m=>`<mark>${m}</mark>`)
-      const ttl=esc(n.title).replace(hlRe,m=>`<mark>${m}</mark>`)
-      return `<div class="sdrop-item" onclick="openNote(${n.id});clearSearch()">
-        <div class="sdrop-title">${ttl}</div>
-        <div class="sdrop-preview">${prev}</div>
-      </div>`
-    }).join('')+`<div class="sdrop-footer">
-      <span class="sdrop-hint"><kbd>↑↓</kbd> Navigate</span>
-      <span class="sdrop-hint"><kbd>↵</kbd> Open</span>
-      <span class="sdrop-hint"><kbd>Esc</kbd> Close</span>
-    </div>`
-  }
-  searchDrop.classList.add('open')
-})
-
-function clearSearch(){ gSearch.value=''; searchDrop.classList.remove('open') }
-gSearch.addEventListener('keydown',e=>{ if(e.key==='Escape') clearSearch() })
-document.addEventListener('click',e=>{ if(!e.target.closest('.search-inner')) searchDrop.classList.remove('open') })
-document.addEventListener('keydown',e=>{ if((e.metaKey||e.ctrlKey)&&e.key==='k'){ e.preventDefault(); gSearch.focus() } })
-
-/* ─────────────────── CHAT ─────────────────── */
-function sendChat(){
-  const ta=document.getElementById('chatTa')
-  const msg=ta.value.trim()
-  if(!msg) return
-  ta.value=''; ta.style.height=''
-  appendMsg('user',msg,[])
-  chatHistory.push({role:'user',content:msg})
-  showTyping()
-  setTimeout(()=>{
-    removeTyping()
-    const resp=buildResponse(msg)
-    appendMsg('ai',resp.text,resp.sources)
-    chatHistory.push({role:'assistant',content:resp.text})
-  },900+Math.random()*700)
-}
-
-function buildResponse(q){
-  const ql=q.toLowerCase()
-  const relevant=notes.filter(n=>
-    n.title.toLowerCase().includes(ql)||
-    n.content.toLowerCase().split(' ').some(w=>w.length>3&&ql.includes(w))
-  ).slice(0,3)
-
-  if(relevant.length){
-    const pick=relevant[0]
-    const snippet=pick.content.replace(/#+\s/g,'').replace(/```[\s\S]*?```/g,'[code]').split('\n').filter(s=>s.trim()&&!s.startsWith('-')).slice(0,2).join(' ')
-    return {
-      text:`Based on your note **"${pick.title}"**, here's what I found:\n\n${snippet.slice(0,280)}\n\nWould you like me to dig deeper or look at related notes?`,
-      sources:relevant.map(n=>({id:n.id,title:n.title}))
-    }
-  }
-  return {
-    text:`I searched through your **${notes.length} notes** but couldn't find specific information about that topic. Try uploading more relevant notes, or rephrase your question. I can also help you create a new note on this topic!`,
-    sources:[]
+    // PAUSE
+    focusRunning = false;
+    clearInterval(focusInterval);
+    focusInterval = null;
+    btn.textContent = '▶ Resume Session';
+    btn.style.background = 'linear-gradient(90deg,var(--p1),var(--t2))';
+    showToast('⏸ Session paused');
   }
 }
 
-function appendMsg(role,text,sources){
-  const msgs=document.getElementById('chatMsgs')
-  const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
-  const av=role==='ai'?'🧠':'YU'
-  const bubble=role==='ai'
-    ?text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')
-    :esc(text)
-  const chips=sources&&sources.length?`<div class="source-chips">${sources.map(s=>`<span class="src-chip">📄 ${esc(s.title)}</span>`).join('')}</div>`:''
-  const el=document.createElement('div')
-  el.className='msg '+role
-  el.innerHTML=`<div class="msg-av ${role}">${av}</div>
-    <div class="msg-body">
-      <div class="msg-bubble">${bubble}</div>
-      ${chips}
-      <div class="msg-meta">${now}</div>
-    </div>`
-  msgs.appendChild(el)
-  msgs.scrollTop=msgs.scrollHeight
+/* ═══════════════════════════════════════
+   GREETING (time-aware)
+═══════════════════════════════════════ */
+function setGreeting() {
+  const h = new Date().getHours();
+  document.getElementById('greeting-text').textContent =
+    h < 5  ? 'Still up late? 🌙' :
+    h < 12 ? 'Good Morning ☀️'   :
+    h < 17 ? 'Good Afternoon 🌤️' :
+    h < 21 ? 'Good Evening 🌆'   : 'Good Night 🌙';
 }
 
-function showTyping(){
-  const msgs=document.getElementById('chatMsgs')
-  const el=document.createElement('div')
-  el.className='typing-row'; el.id='typingRow'
-  el.innerHTML=`<div class="msg-av ai">🧠</div>
-    <div class="typing-bubble">
-      <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
-    </div>`
-  msgs.appendChild(el); msgs.scrollTop=msgs.scrollHeight
-}
-function removeTyping(){ const el=document.getElementById('typingRow'); if(el) el.remove() }
-
-function chatKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendChat() } }
-function autoH(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px' }
-
-/* ─────────────────── AI HUB ─────────────────── */
-function pickAI(card,name,url){
-  document.querySelectorAll('.ai-card').forEach(c=>c.classList.remove('picked'))
-  card.classList.add('picked')
-  selectedAI=name; selectedAIUrl=url
-  document.getElementById('aiPanelTitle').textContent='Open '+name
-  document.getElementById('aiOpenBtn').textContent='Open '+name+' ↗'
-}
-function openAI(){
-  window.open(selectedAIUrl,'_blank')
-  toast('🚀','Opening '+selectedAI+'…')
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2600);
 }
 
-/* ─────────────────── TOAST ─────────────────── */
-let toastTimer
-function toast(icon,msg,type){
-  const el=document.getElementById('toast')
-  document.getElementById('toastIcon').textContent=icon
-  document.getElementById('toastMsg').textContent=msg
-  el.className=type==='err'?'show err':'show'
-  clearTimeout(toastTimer)
-  toastTimer=setTimeout(()=>el.className='',2800)
+/* ═══════════════════════════════════════
+   SHARE
+═══════════════════════════════════════ */
+function copyURL() {
+  const url = document.getElementById('share-url').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => showToast('✅ Link copied!'));
+  } else {
+    const t = document.createElement('textarea');
+    t.value = url; document.body.appendChild(t);
+    t.select(); document.execCommand('copy');
+    document.body.removeChild(t);
+    showToast('✅ Link copied!');
+  }
+}
+function shareWhatsApp() {
+  const url = document.getElementById('share-url').textContent;
+  window.open(`https://wa.me/?text=${encodeURIComponent('📱 Check out my Screen Time app: '+url)}`, '_blank');
+}
+function shareTwitter() {
+  const url = document.getElementById('share-url').textContent;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('Tracking screen time with AI 🤖 '+url)}`, '_blank');
 }
 
-/* ─────────────────── UTILITIES ─────────────────── */
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
-function escRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') }
-function fmtDate(ts){
-  const now=Date.now(),diff=now-ts
-  if(diff<60e3) return 'Just now'
-  if(diff<3600e3) return Math.round(diff/60e3)+'m ago'
-  if(diff<86400e3) return 'Today, '+new Date(ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
-  if(diff<172800e3) return 'Yesterday'
-  if(diff<604800e3) return Math.round(diff/86400e3)+' days ago'
-  return new Date(ts).toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'})
-}
-
-/* upload zone drag show on notes view */
-document.getElementById('view-notes').addEventListener('dragenter',()=>document.getElementById('uploadZone').classList.add('show'))
-document.getElementById('uploadZone').addEventListener('dragleave',function(e){ if(!this.contains(e.relatedTarget)) this.classList.remove('show') })
-
-/* ─────────────────── INIT ─────────────────── */
-renderNotes()
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+setGreeting();
+renderHomeApps();
+renderUsageApps();
+renderHourlyBars();
+renderFocusHistory();
+renderFeatures();
 </script>
 </body>
 </html>
